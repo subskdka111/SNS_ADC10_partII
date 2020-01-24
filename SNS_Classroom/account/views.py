@@ -13,7 +13,7 @@ def view_login(request):
             username=request.POST['username'],
             password=request.POST['password'])
         if user is None:
-            HttpResponse("error")
+            return HttpResponse("error")
         else:
             login(request, user)
             return redirect("/")
