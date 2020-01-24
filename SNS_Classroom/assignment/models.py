@@ -14,6 +14,12 @@ class Assignment(models.Model):
     def __str__(self):
         return f"{{self.author}} created post, titled {{self.postTitle}} at {{self.createdDate}}"
 
+    def postedBy(self):
+        return self.author
+
+    def getModule(self):
+        return self.module
+
 class AssignmentComment(models.Model):
     commenter = models.ForeignKey(User, on_delete=models.CASCADE)
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
@@ -24,8 +30,11 @@ class AssignmentComment(models.Model):
 
 class StudentsFile(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
-    assginment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
     Studentsfile = models.FileField()
 
     def __str__(self):
         return f"{ self.student }\'s assignment on { self.assginment }"
+
+    def getAssignment(self):
+        return self.assignment

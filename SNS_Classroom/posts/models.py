@@ -12,6 +12,9 @@ class Post(models.Model):
     def __str__(self):
         return f"{{self.author}} created post, titled {{self.postTitle}} at {{self.createdDate}}"
 
+    def postedBy(self):
+        return self.author
+
 class Comment(models.Model):
     commenter = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -19,3 +22,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{{self.commenter}}\'s comment on post titled {{self.post}}"
+    
+    def commentFrom(self):
+        return self.post
