@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Posts{% endblock %}
+{% block content %}
+    <div class="container my-5">
+        <div class="card">
+            <h3 class="card-title p-3">Sign up</h3>
+        </div>
+    
+        <div class="container my-5">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Enter First Name:</label>
+                    <input type="text" class="form-control" name="first_name">
+                </div>
+                <div class="form-group">
+                    <label for="username">Enter Last Name:</label>
+                    <input type="text" class="form-control" name="last_name">
+                </div>
+                <div class="form-group">
+                    <label for="username">Enter Username:</label>
+                    <input type="text" class="form-control" name="username">
+                </div>
+                <div class="form-group">
+                    <label for="username">Enter Email:</label>
+                    <input type="email" class="form-control" name="email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Enter Password:</label>
+                    <input type="password" class="form-control" name="password">
+                </div>
+                <div class="form-group">
+                    <label for="role" class="mb-0">Select role:</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="role" id="radio1" value="admin" checked>
+                        <label class="form-check-label" for="radio1">
+                            Admin
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="role" id="radio1" value="staff">
+                        <label class="form-check-label" for="radio1">
+                            Staff
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="role" id="radio1" value="student">
+                        <label class="form-check-label" for="radio1">
+                            Student
+                        </label>
+                    </div>
+                </div>
+                <input type="submit" name="submit" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+{% endblock %}
