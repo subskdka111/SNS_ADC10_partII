@@ -10,8 +10,8 @@
 <body>
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="/posts">
-                CMS
+            <a class="navbar-brand" href="/">
+                SNS Classroom
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
                 <span class="navbar-toggler-icon"></span>
@@ -19,7 +19,13 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item"><a href="/posts/create" class="nav-link">Create Post</a></li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item"><a href="/posts" class="nav-link">Posts</a></li>
+                        <li class="nav-item"><a href="/posts/create" class="nav-link">Create post</a></li>
+                        <li class="nav-item"><a href="/modules" class="nav-link">Modules</a></li>
+                    {% else %}
+                    
+                    {% endif %}
                 </ul>
                 <ul class="navbar-nav dropdown">
                 {% if user.is_authenticated %}

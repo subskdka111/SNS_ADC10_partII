@@ -11,28 +11,39 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('module', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Post',
+            name='Assignment',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('postTitle', models.CharField(max_length=50)),
-                ('postContent', models.CharField(max_length=200)),
-                ('postFiles', models.FileField(upload_to='')),
+                ('assignmentTitle', models.CharField(max_length=50)),
+                ('content', models.CharField(max_length=200)),
+                ('assignmentQuestionPapers', models.FileField(upload_to='')),
                 ('createdDate', models.DateField(auto_now_add=True)),
                 ('updatedDate', models.DateField(auto_now=True)),
                 ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('module', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='module.Module')),
             ],
         ),
         migrations.CreateModel(
-            name='Comment',
+            name='StudentsFile',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('Studentsfile', models.FileField(upload_to='')),
+                ('assginment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='assignment.Assignment')),
+                ('student', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='AssignmentComment',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('commentContent', models.CharField(max_length=200)),
+                ('assignment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='assignment.Assignment')),
                 ('commenter', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('post', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='posts.Post')),
             ],
         ),
     ]
