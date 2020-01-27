@@ -3,9 +3,20 @@
 {% block content %}
     <div class="container my-5">
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">{{ post.postTitle }}</h3>
-                <h6 class="card-subtitle text-muted">posted on {{ post.createdDate }}, by <a href="#" class="card-link">{{ post.author }}</a></h6>
+            <div class="card-header py-1 d-flex justify-content-between align-items-center">
+                <div>
+                    <h3 class="card-title">{{ post.postTitle }}</h3>
+                    <h6 class="card-subtitle text-muted">posted on {{ post.createdDate }}, by <a href="#" class="card-link">{{ post.author }}</a></h6>
+                </div>
+                <div>
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle" type="button" id="postOption" data-toggle="dropdown"></button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="/posts/delete/{{ post.id }}">Delete Post</a>
+                            <a class="dropdown-item" href="/posts/update/{{ post.id }}">Edit Post</a>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <p>{{ post.postContent }}</p>
@@ -31,21 +42,20 @@
                     </div>
                 </form>
             </div>
-            <!-- {% for comment in comments %}
-                <div>{{comment.commentContent}} by {{comment.commenter}}</div>
-            {% endfor %} -->
         </div>
 
-        <div class="card my-3">
-            <div class="card-header">
-                <h5 class="card-title">Comments</h5>
+        {% if comments %}
+            <div class="card my-3">
+                <div class="card-header">
+                    <h5 class="card-title">Comments:</h5>
+                </div>
+                <div class="card-body py-0">
+                    {% for comment in comments %}
+                        <div>{{comment.commenter}}: {{comment.commentContent}}</div>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="card-body py-0">
-                {% for comment in comments %}
-                    <div>{{comment.commenter}}: {{comment.commentContent}}</div>
-                {% endfor %}
-            </div>
-        </div>
+        {% endif %}
 
     </div>
 {% endblock %}

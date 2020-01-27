@@ -50,7 +50,11 @@ def create_post(request):
             fs = FileSystemStorage()
             for uploaded_file in uploaded_files:
                 get_postImage = fs.save(uploaded_file.name, uploaded_file)
-                postImg = PostFiles(post=postObj, file=get_postImage, originalFileName=uploaded_file)
+                postImg = PostFiles(
+                    post=postObj,
+                    file=get_postImage,
+                    originalFileName=uploaded_file
+                )
                 postImg.save()
     return redirect('/posts/')
 
@@ -72,6 +76,17 @@ def update_post(request, id):
         get_post_to_update.postTitle = request.POST['postTitle']
         get_post_to_update.postContent = request.POST['postContent']
         get_post_to_update.save()
+        uploaded_files = request.FILES.getlist('postFile')
+        if uploaded_files:
+            fs = FileSystemStorage()
+            for uploaded_file in uploaded_files:
+                get_postImage = fs.save(uploaded_file.name, uploaded_file)
+                postImg = PostFiles(
+                    post=get_post_to_update,
+                    file=get_postImage,
+                    originalFileName=uploaded_file
+                )
+                postImg.save()
     else:
         messages.error(request, "Not authenticated to edit this post")
     return redirect('/posts/')
