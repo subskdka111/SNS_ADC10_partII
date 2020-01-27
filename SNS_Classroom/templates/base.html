@@ -21,7 +21,6 @@
                 <ul class="navbar-nav mr-auto">
                     {% if user.is_authenticated %}
                         <li class="nav-item"><a href="/posts" class="nav-link">Posts</a></li>
-                        <li class="nav-item"><a href="/posts/create" class="nav-link">Create post</a></li>
                         <li class="nav-item"><a href="/modules" class="nav-link">Modules</a></li>
                     {% else %}
                     
@@ -38,17 +37,36 @@
                 {% else %}
                     <li class="nav-link"><a href="/login">Login</a></li>
                     <li class="nav-link"><a href="/signup">Signup</a></li>
-                    
                 {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
-
+    {% if messages %}
+    {% for message in messages %}
+        <div class="container">
+            <div class="toast fade show mt-3" role="alert">
+                <div class="toast-header">
+                    <strong class="mr-auto">{{ message.tags|capfirst }}:</strong>
+                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
+                        <span>×</span>
+                    </button>
+                </div>
+                <div class="toast-body">
+                    {{ message }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% endif %}
+    
     {% block content %}{% endblock %}
 
     <script src="/static/js/jquery-3.3.1.slim.min.js"></script>
     <script src="/static/js/popper.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
+    <script>
+        $('.toast').toast();
+    </script>
 </body>
 </html>

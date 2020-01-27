@@ -13,9 +13,11 @@ def view_login(request):
             username=request.POST['username'],
             password=request.POST['password'])
         if user is None:
-            return HttpResponse("error")
+            messages.error(request, f"Login Error")
+            return render(request, 'login.html')
         else:
             login(request, user)
+            messages.success(request, f"Logged in Successfully")
             return redirect("/")
 
 def view_signup(request):
@@ -36,8 +38,10 @@ def view_signup(request):
             user.is_staff = 0
         user.save()
         login(request, user)
+        messages.success(request, f"Signed up Successfully")
         return redirect("/")
 
 def view_logout(request):
     logout(request)
+    messages.success(request, f"Logged out Successfully")
     return redirect("/")

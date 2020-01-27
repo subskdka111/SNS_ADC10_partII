@@ -1,13 +1,49 @@
 {% extends "base.html" %}
-{% block title %}Posts{% endblock %}
+{% block title %}{{ post.postTitle }}{% endblock %}
 {% block content %}
     <div class="container my-5">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title p-3">{{ post.postTitle}}</h3>
+                <h3 class="card-title">{{ post.postTitle }}</h3>
+                <h6 class="card-subtitle text-muted">posted on {{ post.createdDate }}, by <a href="#" class="card-link">{{ post.author }}</a></h6>
             </div>
             <div class="card-body">
                 <p>{{ post.postContent }}</p>
+                {% if files %}
+                    <div class="btn-group" role="group">
+                        {% for file in files %}
+                            <a href="{{ file.file.url }}" class="btn btn-primary mt-4">{{ file.originalFileName }}</a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a class="class-link" data-toggle="collapse" href="#collapseComment1">Write a Comment</a>
+            </div>
+            <div class="collapse card-footer" id="collapseComment1">
+                <form action="comment/{{ post.id }}" method="POST">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="commentContent" placeholder="Write a Comment...">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- {% for comment in comments %}
+                <div>{{comment.commentContent}} by {{comment.commenter}}</div>
+            {% endfor %} -->
+        </div>
+
+        <div class="card my-3">
+            <div class="card-header">
+                <h5 class="card-title">Comments</h5>
+            </div>
+            <div class="card-body py-0">
+                {% for comment in comments %}
+                    <div>{{comment.commenter}}: {{comment.commentContent}}</div>
+                {% endfor %}
             </div>
         </div>
 

@@ -1,3 +1,22 @@
-{% extends "postForm.html" %}
+{% extends "base.html" %}
 {% block title %}Create Post{% endblock %}
-{% block actionValue %}create/save{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <form action="create/save" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="postTitle">Post Title:</label>
+            <input type="text" class="form-control" name="postTitle" value="{{ post.postTitle }}">
+        </div>
+        <div class="form-group">
+            <label for="postContent">Content:</label>
+            <textarea class="form-control" name="postContent" rows="5">{{ post.postContent }}</textarea>
+        </div>
+        <div class="form-group">
+            <input type="file" class="form-control-file my-2" id="file" name="postFile" multiple>
+        </div>
+
+        <input type="submit" name="submit" class="btn btn-primary">
+    </form>
+</div>
+{% endblock %}

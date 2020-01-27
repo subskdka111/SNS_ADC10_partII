@@ -4,10 +4,6 @@
     <form action="{% block actionValue %}{% endblock %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group">
-            <label for="author">Author:</label>
-            <input type="text" class="form-control" name="author" value="{{post.author}}">
-        </div>
-        <div class="form-group">
             <label for="postTitle">Post Title:</label>
             <input type="text" class="form-control" name="postTitle" value="{{ post.postTitle }}">
         </div>

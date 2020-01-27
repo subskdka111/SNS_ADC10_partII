@@ -10,4 +10,5 @@ urlpatterns = [
     path('update/save/<int:id>', update_post),
     path('delete/<int:id>', delete_post),
     path('search', search_post),
+    path('comment/<int:id>', post_comment),
 ]
