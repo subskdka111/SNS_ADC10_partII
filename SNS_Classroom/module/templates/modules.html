@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load module_tags %}
 {% block title %}Modules{% endblock %}
 {% block content %}
 <div class="container my-5">
@@ -26,13 +27,15 @@
                 <tr>
                     <th>Module Code</th>
                     <th>Module Name</th>
+                    <th>Enroll</th>
                 </tr>
             </thead>
             <tbody>
                 {% for module in modules %}
                     <tr>
-                        <th>{{ module.moduleCode}}</th>
-                        <th>{{ module.moduleName}}</th>
+                        <th>{{ module.moduleCode }}</th>
+                        <th>{{ module.moduleName }}</th>
+                        <th>{% isEnrolled module enrolledModules %}</th>
                     </tr>
                 {% endfor %}
             </tbody>

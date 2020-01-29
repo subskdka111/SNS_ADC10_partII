@@ -12,7 +12,7 @@ class Assignment(models.Model):
     module = models.ForeignKey(Module, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{{self.author}} created post, titled {{self.postTitle}} at {{self.createdDate}}"
+        return f"{self.author} created post, titled {self.postTitle} at {self.createdDate}"
 
     def postedBy(self):
         return self.author
@@ -26,7 +26,7 @@ class AssignmentComment(models.Model):
     commentContent = models.CharField(max_length=200)
 
     def __str__(self):
-        return f"{{self.commenter}}\'s comment on post titled {{self.post}}"
+        return f"{self.commenter}\'s comment on post titled {self.post}"
 
 class StudentsFile(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
