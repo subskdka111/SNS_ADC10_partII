@@ -22,15 +22,13 @@
                     {% if user.is_authenticated %}
                         <li class="nav-item"><a href="/posts" class="nav-link">Posts</a></li>
                         <li class="nav-item"><a href="/modules" class="nav-link">Modules</a></li>
-                    {% else %}
-                    
                     {% endif %}
                 </ul>
                 <ul class="navbar-nav dropdown">
                 {% if user.is_authenticated %}
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">
                         {{ user.username }}</a>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu dropdown-menu-right">
                         <a class="dropdown-item" href="#!">Profile</a>
                         <a class="dropdown-item" href="/logout">Log out</a>
                     </div>

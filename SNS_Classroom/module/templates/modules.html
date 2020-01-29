@@ -6,27 +6,39 @@
         <h3 class="card-title p-3">Modules</h3>
     </div>
 
-    <table class="table table-striped my-4">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Module Code</th>
-                <th>Module Name</th>
-                <th>Module Teacher</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for module in modules %}
+    <form action="" method="POST" class="my-4">
+        {% csrf_token %}
+        <h6>Add Module:</h6>
+        <div class="form-inline">
+            <label for="moduleCode"></label>
+            <input type="text" class="form-control mr-2" placeholder="Module Code" name="moduleCode">
+
+            <label for="moduleName"></label>
+            <input type="text" class="form-control mr-2" placeholder="Module Name" name="moduleName">
+
+            <input type="submit" class="btn btn-primary">
+        </div>
+    </form>
+
+    {% if modules %}
+        <table class="table table-striped my-4">
+            <thead>
                 <tr>
-                    <th>{{ module.id}}</th>
-                    <th>{{ module.moduleCode}}</th>
-                    <th>{{ module.moduleName}}</th>
-                    <th>{{ module.moduleTeacher}}</th>
+                    <th>Module Code</th>
+                    <th>Module Name</th>
                 </tr>
-            {% empty %}
-                There are no Modules
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for module in modules %}
+                    <tr>
+                        <th>{{ module.moduleCode}}</th>
+                        <th>{{ module.moduleName}}</th>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        There are no Modules
+    {% endif %}
 </div>
 {% endblock %}

@@ -47,7 +47,7 @@
                         <div class="btn-group" role="group">
                             {% for file in files %}
                                 {% if file.post_id == post.id %}
-                                    <a href="{{ file.file.url }}" class="btn btn-primary mt-4">{{ file.originalFileName }}</a>
+                                    <a href="{{ file.file.url }}" class="btn btn-primary mt-4" download>{{ file.originalFileName }}</a>
                                 {% endif %}
                             {% endfor %}
                         </div>
