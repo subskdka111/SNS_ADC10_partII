@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from account.models import UserRole
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.contrib import messages
@@ -29,14 +30,16 @@ def view_signup(request):
             last_name=request.POST['last_name'], 
             username=request.POST['username'], 
             email=request.POST['email'], 
-            password=request.POST['password'])
+            password=request.POST['password']
+        )
         if request.POST['role'] == 'admin':
             user.is_superuser = user.is_staff = 1
-        elif request.POST['role'] == 'staff':
-            user.is_staff = 1
-        else:
-            user.is_staff = 0
+        userRole = UserRole(
+            user=user,
+            role=request.POST['role']
+        )
         user.save()
+        userRole.save()
         login(request, user)
         messages.success(request, f"Signed up Successfully")
         return redirect("/")
