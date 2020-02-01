@@ -6,6 +6,7 @@ from django.template import Template, Context
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
 from posts.models import *
+from module.models import Module
 from django.contrib import messages
 
 def view_posts(request):
@@ -30,7 +31,10 @@ def view_post(request, id):
 
 def view_create_post(request):
     if request.user.is_authenticated:
-        return render(request, 'createPost.html')
+        context_variable = {
+            'modules': Module.objects.all()
+        }
+        return render(request, 'createPost.html', context_variable)
     else:
         return redirect('/posts/')
 
@@ -39,11 +43,14 @@ def create_post(request):
         get_author = request.user
         get_postTitle = request.POST['postTitle']
         get_postContent = request.POST['postContent']
+        get_moduleID = request.POST['module']
         postObj = Post(
-            author=get_author, 
+            author=get_author,
             postTitle=get_postTitle,
             postContent=get_postContent
         )
+        if request.POST['module']:
+            postObj.module = Module.objects.get(pk=get_moduleID)
         postObj.save()
         uploaded_files = request.FILES.getlist('postFile')
         if uploaded_files:
@@ -89,7 +96,7 @@ def update_post(request, id):
                 postImg.save()
     else:
         messages.error(request, "Not authenticated to edit this post")
-    return redirect('/posts/')
+    return redirect('/posts/' + str(id))
 
 def delete_post(request, id):
     get_post_to_delete = Post.objects.get(id=id)

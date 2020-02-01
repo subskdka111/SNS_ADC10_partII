@@ -7,12 +7,15 @@ class Assignment(models.Model):
     assignmentTitle = models.CharField(max_length=50)
     content = models.CharField(max_length=200)
     assignmentQuestionPapers = models.FileField()
-    createdDate = models.DateField(auto_now_add=True)
-    updatedDate = models.DateField(auto_now=True)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(auto_now=True)
     module = models.ForeignKey(Module, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ["-createdDate"]
+
     def __str__(self):
-        return f"{self.author} created post, titled {self.postTitle} at {self.createdDate}"
+        return f"{self.assignmentTitle} assigned at {self.createdDate} by {self.author}"
 
     def postedBy(self):
         return self.author
@@ -26,7 +29,7 @@ class AssignmentComment(models.Model):
     commentContent = models.CharField(max_length=200)
 
     def __str__(self):
-        return f"{self.commenter}\'s comment on post titled {self.post}"
+        return f"{self.commenter}\'s comment on Assignment titled {self.assignment.assignmentTitle}"
 
 class StudentsFile(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -34,7 +37,7 @@ class StudentsFile(models.Model):
     Studentsfile = models.FileField()
 
     def __str__(self):
-        return f"{ self.student }\'s assignment on { self.assginment }"
+        return f"{ self.student }\'s assignment file for { self.assignment.assignmentTitle }"
 
     def getAssignment(self):
         return self.assignment

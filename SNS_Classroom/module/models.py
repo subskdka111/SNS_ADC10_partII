@@ -8,4 +8,4 @@ class Module(models.Model):
     studentsEnrolled = models.ManyToManyField(User, blank=True, related_name="student")
 
     def __str__(self):
-        return f"{ self.moduleCode } - { self.moduleName }"
+        return f"Module Code: {self.moduleCode} | Module Name: {self.moduleName}"

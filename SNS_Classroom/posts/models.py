@@ -1,12 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
+from module.models import Module
 
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     postTitle = models.CharField(max_length=50)
     postContent = models.CharField(max_length=200)
-    createdDate = models.DateField(auto_now_add=True)
-    updatedDate = models.DateField(auto_now=True)
+    createdDate = models.DateTimeField(auto_now_add=True)
+    updatedDate = models.DateTimeField(auto_now=True)
+    module = models.ForeignKey(Module, null=True, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ["-createdDate"]
 
     def __str__(self):
         return f"{self.author} created post, titled {self.postTitle} at {self.createdDate}"
@@ -20,7 +25,7 @@ class Comment(models.Model):
     commentContent = models.CharField(max_length=200)
 
     def __str__(self):
-        return f"{self.commenter}\'s comment on post titled {self.post}"
+        return f"{self.commenter}\'s comment on post titled {self.post.postTitle}"
     
     def commentFrom(self):
         return self.post
@@ -31,4 +36,4 @@ class PostFiles(models.Model):
     originalFileName = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"{self.file} from post {self.post}"
+        return f"{self.file} from post titled {self.post.postTile}"

@@ -21,8 +21,9 @@ def view_login(request):
             messages.success(request, f"Logged in Successfully")
             return redirect("/")
 
+# Anons can't visit this page
 def view_signup(request):
-    if request.method == "GET":
+    if request.method == "GET" and checkRole(request, "admin"):
         return render(request, 'signup.html')
     else:
         user = User.objects.create_user(
@@ -33,6 +34,7 @@ def view_signup(request):
             password=request.POST['password']
         )
         if request.POST['role'] == 'admin':
+            print("super")
             user.is_superuser = user.is_staff = 1
         userRole = UserRole(
             user=user,
@@ -48,3 +50,10 @@ def view_logout(request):
     logout(request)
     messages.success(request, f"Logged out Successfully")
     return redirect("/")
+
+def checkRole(request, role):
+    if request.user.userrole.role == role:
+        return True
+    else:
+        return False
+    
