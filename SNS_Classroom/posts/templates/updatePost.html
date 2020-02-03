@@ -6,11 +6,11 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="postTitle">Post Title:</label>
-            <input type="text" class="form-control" name="postTitle" value="{{ post.postTitle }}">
+            <input type="text" class="form-control" name="postTitle" value="{{ post.postTitle }}" required>
         </div>
         <div class="form-group">
             <label for="postContent">Content:</label>
-            <textarea class="form-control" name="postContent" rows="5">{{ post.postContent }}</textarea>
+            <textarea class="form-control" name="postContent" rows="5" required>{{ post.postContent }}</textarea>
         </div>
         <div class="form-group">
             <input type="file" class="form-control-file my-2" id="file" name="postFile">

@@ -9,7 +9,8 @@ from django.contrib import messages
 def view_login(request):
     if request.method == "GET":
         return render(request, 'login.html')
-    else:
+    
+    if request.method == "POST":
         user = authenticate(
             username=request.POST['username'],
             password=request.POST['password'])
@@ -21,11 +22,15 @@ def view_login(request):
             messages.success(request, f"Logged in Successfully")
             return redirect("/")
 
-# Anons can't visit this page
 def view_signup(request):
     if request.method == "GET" and checkRole(request, "admin"):
         return render(request, 'signup.html')
-    else:
+    
+    if request.method == "POST" and checkRole(request, "admin"):
+        if User.objects.get(username=request.POST['username']):
+            messages.error(request, "Username already defined")
+            return redirect("/signup")
+        
         user = User.objects.create_user(
             first_name=request.POST['first_name'], 
             last_name=request.POST['last_name'], 
@@ -34,8 +39,8 @@ def view_signup(request):
             password=request.POST['password']
         )
         if request.POST['role'] == 'admin':
-            print("super")
             user.is_superuser = user.is_staff = 1
+            
         userRole = UserRole(
             user=user,
             role=request.POST['role']
@@ -54,6 +59,4 @@ def view_logout(request):
 def checkRole(request, role):
     if request.user.userrole.role == role:
         return True
-    else:
-        return False
-    
+    return False

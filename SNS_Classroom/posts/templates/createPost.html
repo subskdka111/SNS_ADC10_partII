@@ -6,10 +6,10 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="postTitle">Post Title:</label>
-            <input type="text" class="form-control" name="postTitle">
+            <input type="text" class="form-control" name="postTitle" required>
         </div>
         <div class="form-group">
-            <label for="postTitle">Post for any certain Module:</label>
+            <label for="module">Post for any certain Module:</label>
             <select class="custom-select" name="module">
                 <option value="" selected>Select Module</option>
                 {% for module in modules %}
@@ -19,7 +19,7 @@
         </div>
         <div class="form-group">
             <label for="postContent">Content:</label>
-            <textarea class="form-control" name="postContent" rows="5"></textarea>
+            <textarea class="form-control" name="postContent" rows="5" required></textarea>
         </div>
         <div class="form-group">
             <input type="file" class="form-control-file my-2" id="file" name="postFile" multiple>

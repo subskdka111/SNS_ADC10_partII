@@ -24,6 +24,7 @@ urlpatterns = [
     path('', view_home),
     path('admin/', admin.site.urls),
     path('posts/', include('posts.urls')),
+    path('assignments/', include('assignment.urls')),
     path('', include('account.urls')),
     path('modules/', include('module.urls')),
 ] 

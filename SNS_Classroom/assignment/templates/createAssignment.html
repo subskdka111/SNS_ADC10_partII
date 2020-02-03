@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Create Assignment{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <form action="create/save" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="assignmentTitle">Assignment Question Title:</label>
+            <input type="text" class="form-control" name="assignmentTitle" required>
+        </div>
+        <div class="form-group">
+            <label for="module">Assignment for Module:</label>
+            <select class="custom-select" name="module">
+                {% for module in modules %}
+                    <option value="{{module.id}}">{{module}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="content">Content:</label>
+            <textarea class="form-control" name="content" rows="5"></textarea>
+        </div>
+        <div class="form-group">
+            <input type="file" class="form-control-file my-2" id="file" name="assignmentQuestionPapers">
+        </div>
+
+        <input type="submit" name="submit" class="btn btn-primary">
+    </form>
+</div>
+{% endblock %}
