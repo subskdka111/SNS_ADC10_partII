@@ -13,6 +13,9 @@ def view_modules(request):
             moduleObj.save()
 
         modules = Module.objects.all()
+
+        # getting all modules enrolled by "request.user"
+        # from module model
         enrolledModules = request.user.student.all()
 
         context_variable = {

@@ -6,8 +6,7 @@
             <div class="card-header py-1 d-flex justify-content-between align-items-center">
                 <div>
                     <h3 class="card-title"><a href="{{ assignment.id }}">{{ assignment.assignmentTitle }}</a></h3>
-                    <h6 class="card-subtitle text-muted">posted by <a href="#" class="card-link">{{ assignment.author }}</a> on
-                        {{assignment.createdDate|date:"M, j"}}</h6>
+                    <h6 class="card-subtitle text-muted">posted by <a href="/profile/{{ assignment.author.id }}" class="card-link">{{ assignment.author }}</a> on {{assignment.createdDate|date:"M, j"}}</h6>
                 </div>
                 {% if user.userrole.role == 'admin' or user == assignment.author %}
                 <div>

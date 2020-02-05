@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from account.models import UserRole
+from module.models import Module
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.contrib import messages
 from account.checkRole import *
 
-# Create your views here.
 def view_login(request):
     if request.method == "GET":
         return render(request, 'login.html')
@@ -57,7 +57,20 @@ def view_signup(request):
 
 def view_profile(request, id):
     if request.method == "GET" and request.user.is_authenticated:
-        return render(request, "profile.html")
+        requestedProfile = User.objects.get(id=id)
+        if requestedProfile.userrole.role == "student":
+            module = request.user.student.all()
+        elif requestedProfile.userrole.role == "teacher" and Module.objects.get(moduleTeacher=requestedProfile):
+            module = Module.objects.get(moduleTeacher=requestedProfile)
+        else:
+            module = ''
+        print(module)
+        context_variable = {
+            'profile' : requestedProfile,
+            'modules' : module
+        }
+        return render(request, "profile.html", context_variable)
+    return redirect("/")
 
 def view_logout(request):
     logout(request)

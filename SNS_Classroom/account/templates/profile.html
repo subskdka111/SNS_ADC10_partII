@@ -1,9 +1,38 @@
 {% extends "base.html" %}
-{% block title %}Profile name here{% endblock %}
+{% block title %}{{ profile.username }}{% endblock %}
 {% block content %}
 <div class="container my-5">
-    <div class="card">
-        <h3>username</h3>
+    <div class="card p-2">
+        <h3>{{ profile.username }}</h3>
+    </div>
+
+    <div class="card my-4">
+        <div class="p-2">
+            <h5>{% if user == profile %}
+                Your 
+            {% else %}
+                {{ profile.username }}'s
+            {% endif %}
+            Details:</h5>
+        </div>
+        <div class="px-2">
+            First name : {{ profile.first_name }} <br>
+            Last name : {{ profile.last_name }} <br>
+            Email : {{ profile.email }} <br>
+        </div>
+
+        <div class="px-2">
+        {% if profile.userrole.role == "teacher" and modules %}
+            Module Teacher for: {{ modules.moduleName }}
+        {% elif profile.userrole.role == "student" %}
+            Modules Joined: <br>
+            <ul>
+                {% for module in modules %}
+                <li>{{ module.moduleName }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}
