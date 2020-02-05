@@ -8,6 +8,7 @@
                     <h3 class="card-title">{{ post.postTitle }}</h3>
                     <h6 class="card-subtitle text-muted">posted by <a href="#" class="card-link">{{ post.author }}</a> on {{ post.createdDate|date:"M, j " }}</h6>
                 </div>
+                {% if user.userrole.role == 'admin' or user == post.author %}
                 <div>
                     <div class="dropdown">
                         <button class="btn dropdown-toggle" type="button" id="postOption" data-toggle="dropdown"></button>
@@ -17,6 +18,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
             </div>
             <div class="card-body">
                 <p>{{ post.postContent }}</p>

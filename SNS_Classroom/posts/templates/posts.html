@@ -4,9 +4,11 @@
     <div class="container my-5">
         <div class="card p-3">
             <h3 class="card-title mb-0">All Posts</h3>
+            {% if user.userrole.role in staff_roles %}
             <div class="card-body p-0">
                 <a href="/posts/create" class="card-link">Click here to create post</a>
             </div>
+            {% endif %}
         </div>
 
         <div class="card my-4">
@@ -26,8 +28,9 @@
             <div class="card-header py-1 d-flex justify-content-between align-items-center">
                 <div>
                     <h3 class="card-title"><a href="{{ post.id }}">{{ post.postTitle }}</a></h3>
-                    <h6 class="card-subtitle text-muted">posted by <a href="#" class="card-link">{{ post.author }}</a> on {{post.createdDate|date:"M, j"}}</h6>
+                    <h6 class="card-subtitle text-muted">posted by <a href="#" class="card-link">{{ post.author }}</a> on {{post.createdDate|date:"M, j"}} {% if post.module.moduleName %}in {{post.module.moduleName}}{% endif %}</h6>
                 </div>
+                {% if user.userrole.role == 'admin' or user == post.author %}
                 <div>
                     <div class="dropdown">
                         <button class="btn dropdown-toggle" type="button" id="postOption"
@@ -38,6 +41,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
             </div>
             <div class="card-body py-3">
                 <div class="card-text">

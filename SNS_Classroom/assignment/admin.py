@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Assignment, AssignmentComment, StudentsFile
 
-# Register your models here.
+admin.site.register(Assignment)
+admin.site.register(AssignmentComment)
+admin.site.register(StudentsFile)

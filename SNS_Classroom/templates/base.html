@@ -30,18 +30,19 @@
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button">
                         {{ user.username }}</a>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="#!">Profile</a>
+                        <a class="dropdown-item" href="/profile/{{ user.id }}">Profile</a>
+                        {% if user.userrole.role == "admin" %}
+                        <a class="dropdown-item" href="/signup">Create User</a>
+                        {% endif %}
                         <a class="dropdown-item" href="/logout">Log out</a>
                     </div>
                 {% else %}
                     <li class="nav-link"><a href="/login">Login</a></li>
-                    <li class="nav-link"><a href="/signup">Signup</a></li>
                 {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
-    {% if messages %}
     {% for message in messages %}
         <div class="container">
             <div class="toast fade show mt-3" role="alert">
@@ -57,7 +58,6 @@
             </div>
         </div>
     {% endfor %}
-    {% endif %}
     
     {% block content %}{% endblock %}
 

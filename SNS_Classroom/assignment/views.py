@@ -8,36 +8,43 @@ from django.db.models import Q
 from assignment.models import *
 from module.models import Module
 from django.contrib import messages
+from account.checkRole import *
 
 def view_assignments(request):
-    listOfassignments = Assignment.objects.all()
-    context_variable = {
-        'assignments': listOfassignments
-    }
-    return render(request, 'assignments.html', context_variable)
+    if request.user.is_authenticated:
+        listOfassignments = Assignment.objects.all()
+        context_variable = {
+            'assignments': listOfassignments,
+            'staff_roles': STAFF_ROLES
+        }
+        return render(request, 'assignments.html', context_variable)
+    messages.error(request, "Login to view assignments")
+    return redirect('/')
 
 def view_assignment(request, id):
-    assignment = Assignment.objects.get(id=id)
-    files = StudentsFile.objects.filter(student=request.user)
-    comments = AssignmentComment.objects.filter(assignment=assignment)
-    context_variable = {
-        'assignment': assignment,
-        'comments': comments,
-        'files': files,
-    }
-    return render(request, 'assignment.html', context_variable)
+    if request.user.is_authenticated:
+        assignment = Assignment.objects.get(id=id)
+        files = StudentsFile.objects.filter(student=request.user)
+        comments = AssignmentComment.objects.filter(assignment=assignment)
+        context_variable = {
+            'assignment': assignment,
+            'comments': comments,
+            'files': files,
+        }
+        return render(request, 'assignment.html', context_variable)
+    messages.error(request, "Login to view assignments")
+    return redirect('/')
 
 def view_create_assignment(request):
-    if request.user.is_authenticated:
+    if checkRole(request, STAFF_ROLES):
         context_variable = {
             'modules': Module.objects.all()
         }
         return render(request, 'createAssignment.html', context_variable)
-    else:
-        return redirect('/assignments/')
+    return redirect('/assignments/')
 
 def create_assignment(request):
-    if request.user.is_authenticated:
+    if checkRole(request, STAFF_ROLES):
         get_author = request.user
         get_assignmentTitle = request.POST['assignmentTitle']
         get_assignmentContent = request.POST['content']
@@ -56,22 +63,19 @@ def create_assignment(request):
         assignmentObj.save()
     return redirect('/assignments/')
 
-
 def view_update_assignment(request, id):
     get_assignment_to_update = Assignment.objects.get(id=id)
-    if request.user.is_authenticated and request.user == get_assignment_to_update.author:
+    if checkRole(request, 'admin') or request.user == get_assignment_to_update.author:
         context_variable = {
             'assignment': get_assignment_to_update
         }
         return render(request, 'updateAssignment.html', context_variable)
-    else:
-        messages.error(request, "Not authenticated to edit this assignment")
-        return redirect('/assignments/')
-
+    messages.error(request, f"Only Admins and {get_assignment_to_update.author} able to edit this post")
+    return redirect('/assignments/')
 
 def update_assignment(request, id):
     get_assignment_to_update = Assignment.objects.get(id=id)
-    if request.user.is_authenticated and request.user == get_assignment_to_update.author:
+    if checkRole(request, 'admin') or request.user == get_assignment_to_update.author:
         get_author = request.user
         get_assignment_to_update.assignmentTitle = request.POST['assignmentTitle']
         get_assignment_to_update.content = request.POST['content']
@@ -82,16 +86,27 @@ def update_assignment(request, id):
             get_assignment_to_update.assignmentQuestionPapers = get_assignmentImage
         get_assignment_to_update.save()
     else:
-        messages.error(request, "Not authenticated to edit this assignment")
+        messages.error(request, f"Only Admins and {get_assignment_to_update.author} able to edit this post")
     return redirect('/assignments/' + str(id))
-
 
 def delete_assignment(request, id):
     get_assignment_to_delete = Assignment.objects.get(id=id)
-    if request.user.is_authenticated and request.user == get_assignment_to_delete.author:
+    if checkRole(request, 'admin') or request.user == get_assignment_to_update.author:
         get_assignment_to_delete.delete()
     else:
-        messages.error(request, "Not authenticated to edit this assignment")
+        messages.error(request, f"Only Admins and {get_post_to_update.author} able to delete this post")
+    return redirect('/assignments/')
+
+def search_assignment(request):
+    if request.user.is_authenticated:
+        get_query = request.POST['q']
+        match = Assignment.objects.filter(Q(assignmentTitle__icontains=get_query) | Q(content__icontains=get_query))
+        context_variable = {
+            'assignments': match,
+            'staff_roles': STAFF_ROLES,
+        }
+        print(match)
+        return render(request, 'assignments.html', context_variable)
     return redirect('/assignments/')
 
 def assignment_comment(request, id):
@@ -105,7 +120,7 @@ def assignment_comment(request, id):
     return redirect('/assignments/' + str(id))
 
 def upload_file(request, id):
-    if request.method == 'POST' and request.user.is_authenticated:
+    if request.method == 'POST' and checkRole(request, 'student'):
         uploaded_file = request.FILES.get('studentsFile')
         if uploaded_file:
             fs = FileSystemStorage()
@@ -121,8 +136,9 @@ def upload_file(request, id):
     return redirect('/assignments/' + str(id))
 
 def delete_file(request, id):
-    s = StudentsFile.objects.get(id=id)
-    id = s.assignment.id
-    s.delete()
+    if checkRole(request, 'student') and request.user == get_post_to_delete.author:
+        s = StudentsFile.objects.get(id=id)
+        id = s.assignment.id
+        s.delete()
     return redirect('/assignments/' + str(id))
         

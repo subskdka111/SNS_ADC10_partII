@@ -9,6 +9,7 @@ urlpatterns = [
     path('update/<int:id>', view_update_assignment),
     path('update/save/<int:id>', update_assignment),
     path('delete/<int:id>', delete_assignment),
+    path('search', search_assignment),
     path('comment/<int:id>', assignment_comment),
     path('uploadfile/<int:id>', upload_file),
     path('deletefile/<int:id>', delete_file),

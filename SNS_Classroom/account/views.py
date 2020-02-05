@@ -4,6 +4,7 @@ from account.models import UserRole
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.contrib import messages
+from account.checkRole import *
 
 # Create your views here.
 def view_login(request):
@@ -23,40 +24,42 @@ def view_login(request):
             return redirect("/")
 
 def view_signup(request):
-    if request.method == "GET" and checkRole(request, "admin"):
-        return render(request, 'signup.html')
-    
-    if request.method == "POST" and checkRole(request, "admin"):
-        if User.objects.get(username=request.POST['username']):
-            messages.error(request, "Username already defined")
-            return redirect("/signup")
+    if checkRole(request, "admin"):
+        if request.method == "GET":
+            return render(request, 'signup.html')
         
-        user = User.objects.create_user(
-            first_name=request.POST['first_name'], 
-            last_name=request.POST['last_name'], 
-            username=request.POST['username'], 
-            email=request.POST['email'], 
-            password=request.POST['password']
-        )
-        if request.POST['role'] == 'admin':
-            user.is_superuser = user.is_staff = 1
+        if request.method == "POST":
+            if User.objects.filter(username=request.POST['username']):
+                messages.error(request, "Username already defined")
+                return redirect("/signup")
             
-        userRole = UserRole(
-            user=user,
-            role=request.POST['role']
-        )
-        user.save()
-        userRole.save()
-        login(request, user)
-        messages.success(request, f"Signed up Successfully")
-        return redirect("/")
+            user = User.objects.create_user(
+                first_name=request.POST['first_name'], 
+                last_name=request.POST['last_name'], 
+                username=request.POST['username'], 
+                email=request.POST['email'], 
+                password=request.POST['password']
+            )
+            if request.POST['role'] == 'admin':
+                user.is_superuser = user.is_staff = 1
+                
+            userRole = UserRole(
+                user=user,
+                role=request.POST['role']
+            )
+            user.save()
+            userRole.save()
+            login(request, user)
+            messages.success(request, f"Signed up Successfully")
+    else:
+        messages.success(request, "Only admins can create user")
+    return redirect("/")
+
+def view_profile(request, id):
+    if request.method == "GET" and request.user.is_authenticated:
+        return render(request, "profile.html")
 
 def view_logout(request):
     logout(request)
     messages.success(request, f"Logged out Successfully")
     return redirect("/")
-
-def checkRole(request, role):
-    if request.user.userrole.role == role:
-        return True
-    return False

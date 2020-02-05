@@ -7,6 +7,7 @@
         <h3 class="card-title p-3">Modules</h3>
     </div>
 
+    {% if user.userrole.role == 'admin' %}
     <form action="" method="POST" class="my-4">
         {% csrf_token %}
         <h6>Add Module:</h6>
@@ -20,6 +21,7 @@
             <input type="submit" class="btn btn-primary">
         </div>
     </form>
+    {% endif %}
 
     {% if modules %}
         <table class="table table-striped my-4">
@@ -27,7 +29,9 @@
                 <tr>
                     <th>Module Code</th>
                     <th>Module Name</th>
-                    <th>Enroll</th>
+                    {% if user.userrole.role == 'student' %}
+                        <th>Enroll</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -35,7 +39,9 @@
                     <tr>
                         <th>{{ module.moduleCode }}</th>
                         <th>{{ module.moduleName }}</th>
-                        <th>{% isEnrolled module enrolledModules %}</th>
+                        {% if user.userrole.role == 'student' %}
+                            <th>{% isEnrolled module enrolledModules %}</th>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>
