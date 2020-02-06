@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'posts',
     'module',
     'assignment',
-    'account'
+    'account',
+    'restapi'
 ]
 
 MIDDLEWARE = [
