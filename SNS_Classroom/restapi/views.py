@@ -12,6 +12,14 @@ def get_review(request):
             "reviews" : review_objects
         }
         return JsonResponse(dict_obj)
+    elif request.method == "POST":
+        dictionary_objects = json.loads(request.body)
+        Review.objects.create(name=dictionary_objects['name'], email=dictionary_objects['email'], content=dictionary_objects['content'])
+        return JsonResponse({
+            "message": "Posted Successfully"
+        })
+    else:
+        return HttpResponse("Other Requests not Found")
 
 @csrf_exempt
 def get_review_id(request, id):
@@ -22,3 +30,14 @@ def get_review_id(request, id):
             "email" : review.email,
             "content" : review.content
         })
+    elif request.method == "PUT":
+        dictionary_objects = json.loads(request.body)
+        review.name=dictionary_objects['name']
+        review.email=dictionary_objects['email']
+        review.content=dictionary_objects['content']
+        review.save()
+        return JsonResponse({
+            "message" : "Post Updated Successfully"
+        })
+    else:
+        return HttpResponse("Other Requests not Found")
