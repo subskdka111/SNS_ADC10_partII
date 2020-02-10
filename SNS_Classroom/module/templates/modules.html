@@ -38,7 +38,13 @@
                 {% for module in modules %}
                     <tr>
                         <th>{{ module.moduleCode }}</th>
-                        <th>{{ module.moduleName }}</th>
+                        <th>
+                            {% if module in enrolledModules or user.userrole.role in staff_roles %}
+                                <a href="{{module.id}}">{{ module.moduleName }}</a>
+                            {% else %}
+                                {{ module.moduleName }}
+                            {% endif %}
+                        </th>
                         {% if user.userrole.role == 'student' %}
                             <th>{% isEnrolled module enrolledModules %}</th>
                         {% endif %}
